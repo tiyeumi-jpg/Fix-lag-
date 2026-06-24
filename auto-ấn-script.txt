@@ -1,0 +1,45 @@
+-- SCRIPT: AUTO PRESS WEAPON KEY (CHI KHI HOI SINH)
+-- CHUC NANG: TU DONG NHAN PHIM CHON VU KHI KHI CHET HOI SINH
+-- KHONG LAP LAI LIEN TUC
+
+local UIS = game:GetService("UserInputService")
+local VIM = game:GetService("VirtualInputManager")
+local LP = game:GetService("Players").LocalPlayer
+
+local LastWeaponKey = 1 -- 1=Melee, 2=Blox, 3=Sword, 4=Gun
+
+-- Ghi nho phim ban an
+UIS.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.One then LastWeaponKey = 1
+    elseif input.KeyCode == Enum.KeyCode.Two then LastWeaponKey = 2
+    elseif input.KeyCode == Enum.KeyCode.Three then LastWeaponKey = 3
+    elseif input.KeyCode == Enum.KeyCode.Four then LastWeaponKey = 4
+    end
+end)
+
+-- Ham nhan phim chon vu khi
+local function pressWeaponKey()
+    local key = Enum.KeyCode.One
+    if LastWeaponKey == 1 then key = Enum.KeyCode.One
+    elseif LastWeaponKey == 2 then key = Enum.KeyCode.Two
+    elseif LastWeaponKey == 3 then key = Enum.KeyCode.Three
+    elseif LastWeaponKey == 4 then key = Enum.KeyCode.Four
+    end
+    VIM:SendKeyEvent(true, key, false, game)
+    task.wait(0.05)
+    VIM:SendKeyEvent(false, key, false, game)
+end
+
+-- Khi nhan vat chet va hoi sinh => tu dong nhan phim
+LP.CharacterAdded:Connect(function()
+    task.wait(0.5) -- Cho nhan vat load
+    pressWeaponKey()
+end)
+
+-- Lan dau chay
+task.wait(1)
+pressWeaponKey()
+
+print("✅ Script auto press on respawn loaded!")
+print("📌 Nhan 1=Melee, 2=Blox, 3=Sword, 4=Gun")
